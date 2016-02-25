@@ -33,11 +33,11 @@
 
   function showCareeDialog(caree) {
     var ev = caree.last_event;
-    $('#careeDialog').attr("title", caree.name);
     $('#careeDialog .event').text(ev.event);
     $('#careeDialog .heartrate').text(ev.heartrate || "----");
     $('#careeDialog .location').text(ev.latitude+", "+ev.longitude+", "+(ev.altitude||""));
     $('#careeDialog').dialog({
+      title: caree.name,
       modal: false,
       closeOnEscape: true,
       position: {
