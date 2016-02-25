@@ -10,6 +10,22 @@
   var MAP = null;
   var MARKERS = [];
 
+  function appendNewPin(latlng, caree) {
+    // http://www.ajaxtower.jp/googlemaps/gmarker/index1.html
+    var marker = MARKERS[caree.id] = new google.maps.Marker({
+      map: MAP,
+      position: latlng,
+      icon: caree.icon,
+      title: caree.name,
+      clickable: true,
+    });
+    // https://developers.google.com/maps/documentation/javascript/examples/event-simple
+    marker.addListener('click', function() {
+      // MAP.setZoom(20);
+      MAP.setCenter(marker.getPosition());
+    });
+  }
+
   function onMqttMessage(message) {
     var data = null;
     try {
@@ -22,17 +38,29 @@
     if (location && location.lat && location.lon) {
       var latlng = new google.maps.LatLng(location.lat, location.lon);
       if (MARKERS[data.caree_id]==null) {
-        // http://www.ajaxtower.jp/googlemaps/gmarker/index1.html
-        var marker = MARKERS[data.caree_id] = new google.maps.Marker({
-          map: MAP,
-          position: latlng,
-          clickable: true,
-        });
-        // https://developers.google.com/maps/documentation/javascript/examples/event-simple
-        marker.addListener('click', function() {
-          // MAP.setZoom(20);
-          MAP.setCenter(marker.getPosition());
-        });
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/carees/"+data.caree_id+".json", true);
+        xhr.onload = function (e) {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+              var caree = null;
+              try {
+                var caree = JSON.parse(xhr.responseText);
+              } catch(e) {
+                console.log(e, xhr.responseText);
+                return;
+              }
+              appendNewPin(latlng, caree);
+            } else {
+              document.getElementById('status').innerHTML = xhr.statusText;
+            }
+          }
+        };
+        xhr.onerror = function (e) {
+          document.getElementById('status').innerHTML = xhr.statusText;
+        };
+        xhr.send(null);
+
       } else {
         MARKERS[data.caree_id].setPosition(latlng);
       }
