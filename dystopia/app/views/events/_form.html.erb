@@ -1,0 +1,30 @@
+<%= form_for(@event) do |f| %>
+  <% if @event.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@event.errors.count, "error") %> prohibited this event from being saved:</h2>
+
+      <ul>
+      <% @event.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+    <tbody>
+      <tr>
+        <td>Event</td>
+        <td><%= text_field :event, :event, size:40, maxlength:36 %></td>
+      </tr>
+      <tr>
+        <td>User ID</td>
+        <td><%= text_field :event, :caree_id, size:40, maxlength:10 %></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

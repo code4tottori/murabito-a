@@ -1,0 +1,30 @@
+<%= form_for(@caree) do |f| %>
+  <% if @caree.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@caree.errors.count, "error") %> prohibited this caree from being saved:</h2>
+
+      <ul>
+      <% @caree.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+    <tbody>
+      <tr>
+        <td>Name</td>
+        <td><%= text_field :caree, :name, size:40, maxlength:192 %></td>
+      </tr>
+      <tr>
+        <td>Icon (URI)</td>
+        <td><%= text_field :caree, :icon, size:100, maxlength:4096 %></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

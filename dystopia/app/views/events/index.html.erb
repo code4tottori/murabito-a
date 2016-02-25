@@ -1,0 +1,48 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Events</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Event</th>
+      <th>Heartrate</th>
+      <th>Location</th>
+      <th>Acceleration</th>
+      <!--<th colspan="3"></th>-->
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @events.each do |event| %>
+      <tr>
+        <td><%= Caree.find(event.caree_id).name %></td>
+        <td><%= event.event %></td>
+        <td><%= event.heartrate %></td>
+        <td>
+          <% if event.latitude and event.longitude %>
+            <%= event.latitude %>,<%= event.longitude %>
+          <% end %>
+          <% if event.altitude %>
+            <%= event.altitude %>
+          <% end %>
+        </td>
+        <td>
+          <% if event.acceleration_x and event.acceleration_y and event.acceleration_z %>
+            <%= event.acceleration_x %>, <%= event.acceleration_y %>, <%= event.acceleration_z %>
+          <% end %>
+        </td>
+        <!--
+        <td><%= link_to 'Show', event %></td>
+        <td><%= link_to 'Edit', edit_event_path(event) %></td>
+        <td><%= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        -->
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Event', new_event_path %>

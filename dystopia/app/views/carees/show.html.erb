@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+<table>
+  <tbody>
+    <tr>
+      <td>Name</td>
+      <td><%= @caree.name %></td>
+    </tr>
+    <tr>
+      <td>Icon (URI)</td>
+      <td><%= @caree.icon %></td>
+    </tr>
+    <tr>
+      <td>Event count</td>
+      <td><%= @caree.event_ids.size %></td>
+    </tr>
+  </tbody>
+</table>
+
+<%= link_to 'Edit', edit_caree_path(@caree) %> |
+<%= link_to 'Back', carees_path %>
