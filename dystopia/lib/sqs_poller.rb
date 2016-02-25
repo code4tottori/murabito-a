@@ -34,7 +34,7 @@ public
     SQSClient.new(@queue_uri).poll_message{|msg|
       begin
         params = OpenStruct.new(JSON.parse(msg))
-        raise ValidationError, 'device is nil.'  unless params.device
+        raise ValidationError, 'caree_id is nil.'  unless params.caree_id
         raise ValidationError, 'event is nil.'   unless params.event
         params.heartrate = to_float(params.heartrate)
         if test_hash(params.location, :location)
@@ -49,9 +49,9 @@ public
           params.acceleration.y = to_float(params.acceleration.y)
           params.acceleration.z = to_float(params.acceleration.z)
         end
+        caree = Caree.find(params.caree_id)
         ev = Event.create!(
-          user_id:      User.where(device_uuid:params.device).take!.id,
-          device:       params.device,
+          caree_id:     params.caree_id,
           event:        params.event,
           heartrate:    params.heartrate,
           latitude:     params.location.lat,
@@ -62,7 +62,7 @@ public
           acceleration_z: params.acceleration.z,
           created_at:   params.datetime,
         )
-        Rails.logger.info "Stored: #{User.find(ev.user_id).name}@#{Event.find(ev.id).to_json}"
+        Rails.logger.info "Stored: #{caree.name}@#{Event.find(ev.id).to_json}"
         true
       rescue ValidationError, ActiveRecord::RecordNotFound, JSON::ParserError
         Rails.logger.warn "Store failed. dropped. '#{msg}' - #{$!.class} `#{$!.message}`"

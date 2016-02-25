@@ -21,12 +21,11 @@
     var location = data.location;
     if (location && location.lat && location.lon) {
       var latlng = new google.maps.LatLng(location.lat, location.lon);
-      if (MARKERS[data.device]==null) {
+      if (MARKERS[data.caree_id]==null) {
         // http://www.ajaxtower.jp/googlemaps/gmarker/index1.html
-        var marker = MARKERS[data.device] = new google.maps.Marker({
+        var marker = MARKERS[data.caree_id] = new google.maps.Marker({
           map: MAP,
           position: latlng,
-          title: data.device,
           clickable: true,
         });
         // https://developers.google.com/maps/documentation/javascript/examples/event-simple
@@ -35,7 +34,7 @@
           MAP.setCenter(marker.getPosition());
         });
       } else {
-        MARKERS[data.device].setPosition(latlng);
+        MARKERS[data.caree_id].setPosition(latlng);
       }
     } else {
       console.log("dropped: ", message.payloadString);
@@ -88,7 +87,7 @@
     こんなのをpublish
   </div>
   <div><code>
-    {"device":"0BAD0194-53E0-434B-BFB5-D10F8A1B9B37","event":"MOVED", "location":{"lat":35.515132, "lon":134.1696503}}
+    {"caree_id":1,"event":"MOVED", "location":{"lat":35.515132, "lon":134.1696503}}
   </code></div>
   <hr/>
   <div id="status">---</div>
