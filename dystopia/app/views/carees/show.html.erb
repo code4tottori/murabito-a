@@ -13,6 +13,10 @@
       <td>Event count</td>
       <td><%= @caree.event_ids.size %></td>
     </tr>
+    <tr>
+      <td>Last event</td>
+      <td><%= if @caree.last_event then @caree.last_event.id else "-" end  %></td>
+    </tr>
   </tbody>
 </table>
 
