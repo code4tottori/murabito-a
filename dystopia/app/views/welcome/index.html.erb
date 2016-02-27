@@ -1,14 +1,13 @@
-<div id="map_canvas" style="width:720px; height:640px"></div>
-<div>こんなのをpublish</div>
-<div><code>{"caree_id":1,"event":"MOVED", "location":{"lat":35.515132, "lon":134.1696503}}</code></div>
-<hr/>
-<div id="status">---</div>
-<div id="careeDialog" title="--name--">
-<div class="event"></div>
-<div class="location"></div>
-<div class="heartrate"></div>
-<hr/>
-<a href="/device.html">for Publish from phones</a>
+<div id="googleMap">
+  <div id="map_canvas" style="width:720px; height:640px"></div>
+  <div>MQTT Status<code id="status">---</code></div>
+  <div>Publish example:<code>{"caree_id":1,"event":"MOVED", "location":{"lat":35.515132, "lon":134.1696503}}</code></div>
+  <div id="careeDialog" title="--name--">
+    <div class="event"></div>
+    <div class="location"></div>
+    <div class="heartrate"></div>
+  </div>
+</div>
 <script>
   var MQTTClient = null;
   var MAP = null;
@@ -123,7 +122,7 @@
       MQTTClient.onMessageArrived = onMqttMessage;
       MQTTClient.onConnectionLost = function(e) {
         console.log("MQTTClient.onConnectionLost", e);
-        document.getElementById('status').innerHTML = "DISCONNECT";
+        document.getElementById('status').innerHTML = "DISCONNECTED";
         setTimeout(function() {
           connectMQTT();
         }, 1);
