@@ -22,8 +22,6 @@ gem 'bootswatch-rails'
 
 gem 'jquery-rails'
 gem 'jquery-ui-sass-rails'
-gem 'jbuilder', '~> 2.0'
-gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'bootstrap-sass'
 gem 'bootstrap-sass-extras'
@@ -33,6 +31,7 @@ gem 'font-awesome-rails'
 
 gem 'rack-utf8_sanitizer'
 
+gem 'jbuilder', '~> 2.0'
 gem 'grape'
 gem 'aws-sdk'
 gem 'mqtt'
