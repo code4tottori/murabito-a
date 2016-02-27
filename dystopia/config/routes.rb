@@ -4,4 +4,5 @@ Rails.application.routes.draw do
 
   get '/', :to => redirect('/googlemap_marker.html')
   resources :mqtturis, only:[:index], path:'mqtturi'
+  # root to: 'welcome#index'
 end
