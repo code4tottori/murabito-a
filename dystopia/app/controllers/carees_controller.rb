@@ -1,5 +1,18 @@
 class CareesController < ApplicationController
-  before_action :set_caree, only: [:show, :edit, :update, :destroy]
+  before_action :set_caree, only: [:show, :edit, :update, :destroy, :locations]
+
+  # GET /carees/1/locations
+  def locations
+    @locations = Event.where(caree_id:@caree).where.not(latitude:nil).where.not(longitude:nil) \
+                  .order("id DESC").limit(10) \
+                  .pluck(:latitude, :longitude).map{|v|
+                    {latitude:v[0], longitude:v[1]}
+                  }
+    respond_to do |format|
+      format.html { render :show_locations }
+      format.json { render :show_locations }
+    end
+  end
 
   # GET /carees
   # GET /carees.json

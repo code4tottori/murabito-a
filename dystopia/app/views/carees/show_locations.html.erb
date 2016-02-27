@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<div><img src="<%= @caree.icon %>" /><span><%= @caree.name %> (<%= @caree.id %>)</span></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Locations (<%= @locations.count %>)</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @locations.each do |location| %>
+      <tr>
+        <td>
+          <%= location[:latitude] %>, <%= location[:longitude] %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Edit', edit_caree_path(@caree) %> |
+<%= link_to 'Back', carees_path %>

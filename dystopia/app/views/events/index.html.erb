@@ -17,7 +17,7 @@
   <tbody>
     <% @events.each do |event| %>
       <tr>
-        <td><%= Caree.find(event.caree_id).name %></td>
+        <td><%= caree = Caree.find(event.caree_id); "#{caree.name} (#{caree.id})" %></td>
         <td><%= event.event %></td>
         <td><%= event.heartrate %></td>
         <td>
