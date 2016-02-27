@@ -1,0 +1,4 @@
+web: bin/rails server -b 0.0.0.0
+#sqs: bin/rails runner lib/sqs_poller.rb
+sqs: SQS_URI=https://sqs.ap-northeast-1.amazonaws.com/611913629108/murabito-b bin/rails runner lib/sqs_poller.rb
+log: tail -f log/development.log
