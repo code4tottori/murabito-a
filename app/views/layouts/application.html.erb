@@ -72,20 +72,12 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-8">
           <%= bootstrap_flash %>
           <%= yield %>
         </div>
-        <div class="col-md-3">
-          <div class="well sidebar-nav">
-            <h3>Sidebar</h3>
-            <ul class="nav nav-list">
-              <li class="nav-header">Sidebar</li>
-              <li><%= link_to "Link1", "#"  %></li>
-              <li><%= link_to "Link2", "#"  %></li>
-              <li><%= link_to "Link3", "#"  %></li>
-            </ul>
-          </div><!--/.well -->
+        <div class="col-md-4">
+          <%= render partial: 'sidebar' %>
         </div><!--/span-->
       </div><!--/row-->
 
