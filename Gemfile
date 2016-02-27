@@ -29,6 +29,8 @@ gem 'compass'
 gem 'compass-rails'
 gem 'font-awesome-rails'
 
+gem 'js-routes'
+
 gem 'rack-utf8_sanitizer'
 
 gem 'jbuilder', '~> 2.0'

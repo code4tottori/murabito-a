@@ -50,7 +50,7 @@ $(document).ready(function() {
       }
 
       function showCareeTrail(caree) {
-        $.get("/carees/"+caree.id+"/locations", "", function(data){
+        $.get(Routes.locations_caree_path(caree.id), "", function(data) {
           if (caree.path) {
             caree.path.setMap(null);
           }
@@ -78,7 +78,7 @@ $(document).ready(function() {
         if (location && location.lat && location.lon) {
           var latlng = new google.maps.LatLng(location.lat, location.lon);
           if (MARKERS[event.caree_id]==null) {
-            $.get("/carees/"+event.caree_id+".json", "", function(caree){
+            $.get(Routes.caree_path(event.caree_id, {format: 'json'}), "", function(caree) {
               appendNewPin(latlng, caree);
             }, "json");
           } else {
@@ -100,7 +100,7 @@ $(document).ready(function() {
       }
 
       function connectMQTT() {
-        $.get("/mqtturi", "", function(resp){
+        $.get(Routes.mqtturis_path(), "", function(resp){
           var endpoint = resp.uri;
           var clientId = Math.random().toString(36).substring(7);
           var connectOptions = {
@@ -132,7 +132,7 @@ $(document).ready(function() {
           center: latlng,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         });
-        $.get("/carees.json", "", function(carees){
+        $.get(Routes.carees_path({format: 'json'}), "", function(carees) {
           carees.forEach(function(caree,index,arr){
             console.log("loading: ", caree.name, caree.last_event);
             if (caree.last_event && caree.last_event.latitude && caree.last_event.longitude) {
