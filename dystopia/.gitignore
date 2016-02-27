@@ -16,6 +16,7 @@
 !/log/.keep
 /tmp
 
+/.foreman
 /.envrc
 /config/environments/development.local.rb
 
