@@ -21,6 +21,7 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'bootswatch-rails'
 
 gem 'jquery-rails'
+gem 'jquery-ui-sass-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
