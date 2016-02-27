@@ -22,11 +22,12 @@
       title: caree.name,
       clickable: true,
     });
-    marker['caree'] = caree;
+    marker.caree = caree;
     // https://developers.google.com/maps/documentation/javascript/examples/event-simple
     marker.addListener('click', function() {
       // MAP.setZoom(20);
       MAP.setCenter(marker.getPosition());
+      showCareeTrail(marker.caree);
       showCareeDialog(marker.caree);
     });
   }
@@ -36,6 +37,9 @@
     $('#careeDialog .event').text(ev.event);
     $('#careeDialog .heartrate').text(ev.heartrate || "----");
     $('#careeDialog .location').text(ev.latitude+", "+ev.longitude+", "+(ev.altitude||""));
+    $('#careeDialog').on("dialogclose", function(e){
+      caree.path.setMap(null);
+    });
     $('#careeDialog').dialog({
       title: caree.name,
       modal: false,
@@ -48,6 +52,23 @@
       show: 500,
       hide: 500
     });
+  }
+
+  function showCareeTrail(caree) {
+    $.get("/carees/"+caree.id+"/locations", "", function(data){
+      if (caree.path) {
+        caree.path.setMap(null);
+      }
+      // https://developers.google.com/maps/documentation/javascript/examples/polyline-simple
+      caree.path = new google.maps.Polyline({
+        path: data,
+        geodesic: true,
+        strokeColor: '#FF8080',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+      });
+      caree.path.setMap(MAP);
+    }, "json");
   }
 
   function onMqttMessage(message) {

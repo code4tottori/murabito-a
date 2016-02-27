@@ -4,9 +4,9 @@ class CareesController < ApplicationController
   # GET /carees/1/locations
   def locations
     @locations = Event.where(caree_id:@caree).where.not(latitude:nil).where.not(longitude:nil) \
-                  .order("id DESC").limit(10) \
+                  .order("id DESC").limit(100) \
                   .pluck(:latitude, :longitude).map{|v|
-                    {latitude:v[0], longitude:v[1]}
+                    {lat:v[0], lng:v[1]} #=>google.maps.Polyline(path:)形式
                   }
     respond_to do |format|
       format.html { render :show_locations }
