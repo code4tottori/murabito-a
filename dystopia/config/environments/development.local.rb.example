@@ -1,0 +1,7 @@
+# Usage:
+#   cp config/environments/development.local.rb.example config/environments/development.local.rb
+#
+Rails.application.configure do
+  # local configure here
+end
+
