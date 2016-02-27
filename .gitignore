@@ -5,15 +5,24 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 # Ignore bundler config.
-/dystopia/.bundle
-/dystopia/vendor/bundle
+/.bundle
+/vendor/bundle
 
 # Ignore the default SQLite database.
-/dystopia/db/*.sqlite3
-/dystopia/db/*.sqlite3-journal
+/db/*.sqlite3
+/db/*.sqlite3-journal
 
 # Ignore all logfiles and tempfiles.
-/dystopia/log/*
-!/dystopia/log/.keep
-/dystopia/tmp
+/log/*
+!/log/.keep
+/tmp
+
+/.foreman
+/.env
+/.envrc
+/config/environments/development.local.rb
+
+*.swp
+*~
 ._*
+
