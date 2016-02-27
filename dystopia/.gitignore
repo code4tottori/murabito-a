@@ -17,6 +17,7 @@
 /tmp
 
 /.foreman
+/.env
 /.envrc
 /config/environments/development.local.rb
 
