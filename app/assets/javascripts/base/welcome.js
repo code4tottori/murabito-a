@@ -1,12 +1,44 @@
 
-var MQTTClient = null;
-var MAP = null;
-var MARKERS = [];
-
 $(document).ready(function() {
   if ($("body").hasClass("welcome")) {
 
     if ($("body").hasClass("index")) {
+
+      // append caree status to sidebar.
+      var appendCaree = function(caree, marker) {
+        var panel = $('<li class="panel panel-primary" />');
+        var heading = $('<div class="panel-heading">').appendTo(panel);
+        var link = $('<a href="#" />').text(caree.name);
+        $('<h4 class="panel-title">').append(link).appendTo(heading);
+
+        var body = $('<div class="panel-body">').appendTo(panel);
+        var media = $('<div class="media">').appendTo(body);
+        var img = $('<a href="#" />').append($('<img class="img-circle media-object" />').attr('src', caree.icon).attr('alt', caree.name))
+        $('<div class="media-left">').append(
+            img
+          ).appendTo(media);
+        $('<div class="media-body">').append(
+          $('<ul />').append(
+              $('<li />').text('lat: ' + caree.last_event.latitude)
+            ).append(
+              $('<li />').text('lng: ' + caree.last_event.longitude)
+            )
+          ).appendTo(media);
+
+        var onClick = function(ev) {
+          MAP.setCenter(marker.getPosition());
+          showCareeTrail(marker.caree);
+          showInfoWindow(marker);
+        };
+        $(link).on('click', onClick);
+        $(img).on('click', onClick);
+
+        $('ul.status').append(panel);
+      };
+
+      var MAP = null;
+      var MARKERS = [];
+      var dialog = null;
 
       function appendNewPin(latlng, caree) {
         // http://www.ajaxtower.jp/googlemaps/gmarker/index1.html
@@ -20,33 +52,27 @@ $(document).ready(function() {
         marker.caree = caree;
         // https://developers.google.com/maps/documentation/javascript/examples/event-simple
         marker.addListener('click', function() {
-          // MAP.setZoom(20);
           MAP.setCenter(marker.getPosition());
           showCareeTrail(marker.caree);
-          showCareeDialog(marker.caree);
+          showInfoWindow(marker);
         });
+        return marker;
       }
 
-      function showCareeDialog(caree) {
-        var ev = caree.last_event;
-        $('#careeDialog .event').text(ev.event);
-        $('#careeDialog .heartrate').text(ev.heartrate || "----");
-        $('#careeDialog .location').text(ev.latitude+", "+ev.longitude+", "+(ev.altitude||""));
-        $('#careeDialog').on("dialogclose", function(e){
-          caree.path.setMap(null);
+      function showInfoWindow(marker) {
+        if (dialog) { dialog.close(); }
+
+        // $('#careeDialog .event').text(ev.event);
+        // $('#careeDialog .heartrate').text(ev.heartrate || "----");
+        // $('#careeDialog .location').text(ev.latitude+", "+ev.longitude+", "+(ev.altitude||""));
+        // $('#careeDialog').on("dialogclose", function(e){
+        //   caree.path.setMap(null);
+        // });
+
+        dialog = new google.maps.InfoWindow({
+          content: $("<b>もえもえ</b>")[0]
         });
-        $('#careeDialog').dialog({
-          title: caree.name,
-          modal: false,
-          closeOnEscape: true,
-          position: {
-            of: "#map_canvas",
-            at: "center",
-            my: "left top"
-          },
-          show: 500,
-          hide: 500
-        });
+        dialog.open(MAP, marker);
       }
 
       function showCareeTrail(caree) {
@@ -79,7 +105,8 @@ $(document).ready(function() {
           var latlng = new google.maps.LatLng(location.lat, location.lon);
           if (MARKERS[event.caree_id]==null) {
             $.get(Routes.caree_path(event.caree_id, {format: 'json'}), "", function(caree) {
-              appendNewPin(latlng, caree);
+              var marker = appendNewPin(latlng, caree);
+              appendCaree(caree, marker);
             }, "json");
           } else {
             MARKERS[event.caree_id].setPosition(latlng);
@@ -98,6 +125,8 @@ $(document).ready(function() {
           console.log("dropped: ", message.payloadString);
         }
       }
+
+      var MQTTClient = null;
 
       function connectMQTT() {
         $.get(Routes.mqtturis_path(), "", function(resp){
@@ -125,26 +154,22 @@ $(document).ready(function() {
         }, "json");
       }
 
-      function initialize() {
-        var latlng = new google.maps.LatLng(35.515132, 134.1696503);
-        MAP = new google.maps.Map(document.getElementById("map_canvas"), {
-          zoom: 16,
-          center: latlng,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
+      MAP = new google.maps.Map(document.getElementById("map_canvas"), {
+        zoom: 16,
+        center: new google.maps.LatLng(35.515132, 134.1696503),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+      $.get(Routes.carees_path({format: 'json'}), "", function(carees) {
+        carees.forEach(function(caree,index,arr){
+          console.log("loading: ", caree.name, caree.last_event);
+          if (caree.last_event && caree.last_event.latitude && caree.last_event.longitude) {
+            var latlng = new google.maps.LatLng(caree.last_event.latitude, caree.last_event.longitude);
+            var marker = appendNewPin(latlng, caree);
+            appendCaree(caree, marker);
+          }
         });
-        $.get(Routes.carees_path({format: 'json'}), "", function(carees) {
-          carees.forEach(function(caree,index,arr){
-            console.log("loading: ", caree.name, caree.last_event);
-            if (caree.last_event && caree.last_event.latitude && caree.last_event.longitude) {
-              var latlng = new google.maps.LatLng(caree.last_event.latitude, caree.last_event.longitude);
-              appendNewPin(latlng, caree);
-            }
-          });
-        });
-        connectMQTT();
-      }
-
-      initialize();
+      });
+      connectMQTT();
     }
   }
 });
