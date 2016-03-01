@@ -22,4 +22,12 @@
 
 class Event < ActiveRecord::Base
   belongs_to :caree
+
+  scope :valid_location, -> { where.not(latitude: nil).where.not(longitude: nil) }
+
+  class << self
+    def to_google_map_polyline_format
+      all.pluck(:latitude, :longitude).map { |lat, lng| { lat: lat, lng: lng } }
+    end
+  end
 end

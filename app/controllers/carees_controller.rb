@@ -3,11 +3,7 @@ class CareesController < ApplicationController
 
   # GET /carees/1/locations
   def locations
-    @locations = Event.where(caree_id:@caree).where.not(latitude:nil).where.not(longitude:nil) \
-                  .order("id DESC").limit(100) \
-                  .pluck(:latitude, :longitude).map{|v|
-                    {lat:v[0], lng:v[1]} #=>google.maps.Polyline(path:)形式
-                  }
+    @locations = @caree.events.valid_location.order(id: :desc).limit(100).to_google_map_polyline_format
     respond_to do |format|
       format.html { render :show_locations }
       format.json { render :show_locations }
@@ -17,7 +13,7 @@ class CareesController < ApplicationController
   # GET /carees
   # GET /carees.json
   def index
-    @carees = Caree.all
+    @carees = Caree.includes(:last_event).all
   end
 
   # GET /carees/1
