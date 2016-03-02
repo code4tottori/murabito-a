@@ -17,7 +17,7 @@
   };
   var DEVCIE = function(caree_id){
     this.topic = {
-      caree_id:caree_id,
+      caree_id:Number(caree_id),
       event:"MOVED",
       heartrate:null,
       location:{lat:null, lon:null, alt:null},
@@ -58,26 +58,37 @@
     $("#acc-x").html(sprintf("%12.5f", thisDevice.topic.acceleration.x));
     $("#acc-y").html(sprintf("%12.5f", thisDevice.topic.acceleration.y));
     $("#acc-z").html(sprintf("%12.5f", thisDevice.topic.acceleration.z));
+    var acc = thisDevice.topic.acceleration;
+    var norm = Math.sqrt(acc.x*acc.x + acc.y*acc.y + acc.z*acc.z);
+    var tumbled = (norm>=6.0)? true: false;
+    $("#norm").html(sprintf("%12.5f", norm));
     if (MQTTClient.publish) {
       if (byNow==true) MQTTClient.sendCount = 0;
-      if (--MQTTClient.sendCount<=0) {
+      if (--MQTTClient.sendCount<=0 || tumbled) {
         MQTTClient.sendCount = MQTTClient.sendInterval;
-        var message = new Paho.MQTT.Message(JSON.stringify(thisDevice.topic));
+        var topic = JSON.stringify(thisDevice.topic);
+        if (tumbled) {
+          var v = JSON.parse(topic);
+          v.event = "TUMBLED";
+          topic = JSON.stringify(v);
+        }
+        var message = new Paho.MQTT.Message(topic);
         message.destinationName = "murabito-a/moved";
         MQTTClient.send(message);
         console.log("publish: "+message);
         $("#count").html(
-          Number($("#count").text())+1
+          Number($("#count").text()) + (tumbled ? 1000 : 1)
         );
       }
     }
   }
 
   function set_caree_id() {
-    var id = $("#caree_id").attr("value");
+    var id = $("#caree_id").val();
     $.get("/carees/"+id+".json","", function(caree) {
       $("#name").html(caree.name);
       $("#icon").attr("src", caree.icon);
+      thisDevice.caree_id = Number(id);
     }, "json");
   }
 
@@ -103,13 +114,13 @@
         mqttVersion: 4,
         onSuccess: function() {
           $('#mqtt-status').html("CONNECTED");
-          MQTTClient['sendInterval'] = 10;
+          MQTTClient['sendInterval'] = 10*5;
           MQTTClient['sendCount'] = 0;
           MQTTClient['sendTimer'] = setInterval(function(){
             if (thisDevice.has_location()) {
               updateTopic();
             }
-          }, 1*1000);
+          }, 0.2*1000);
         }
       };
       MQTTClient = new Paho.MQTT.Client(endpoint, clientId);
@@ -155,6 +166,7 @@
   <div><code id="acc-x">---</code></div>
   <div><code id="acc-y">---</code></div>
   <div><code id="acc-z">---</code></div>
+  <div><code id="norm">---</code></div>
   <div><code>Topic</code><code id="count">0</code><code>&nbsp;times sent</code></div>
   <hr/>
   <div><code>MQTT</code><code id="mqtt-status">---</code></div>
