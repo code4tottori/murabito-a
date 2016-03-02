@@ -61,8 +61,8 @@ $(document).ready(function() {
 
       function showInfoWindow(marker) {
         if (dialog) {
-          dialog.caree.path.setMap(null);
-          dialog.marker.setMap(MAP);
+          if (dialog.caree.path) { dialog.caree.path.setMap(null); }
+          if (dialog.marker) { dialog.marker.setMap(MAP); }
           dialog.close();
         }
 
