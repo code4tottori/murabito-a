@@ -11,6 +11,8 @@ Dystopia
 
 # heroku で動かす手順
 
+以下、で実行されている `heroku` コマンドは必要に応じて `--app` オプションを付けて下さい。
+
 ## 前準備
 
 * murabito-a を github リポジトリからクローンできてる?
@@ -50,6 +52,16 @@ git push heroku master
 | AWS_REGION            | `TODO: fixme`        |
 | AWS_ACCESS_KEY_ID     | `TODO: fixme`        |
 | AWS_SECRET_ACCESS_KEY | `TODO: fixme`        |
+
+## worker を動かす必要ががが
+
+```
+$ heroku ps:scale           # 確認
+console=0:Free rake=0:Free web=1:Free worker=0:Free
+$ heroku ps:scale worker=1  # worker プロセスを動かす
+$ heroku ps:scale           # 確認
+console=0:Free rake=0:Free web=1:Free worker=1:Free
+```
 
 ## FAQ
 
