@@ -109,6 +109,7 @@ $(document).ready(function() {
         if (dialog) {
           if (dialog.caree.path) { dialog.caree.path.setMap(null); }
           if (dialog.marker) { dialog.marker.setMap(MAP); }
+          dialog.close();
           dialog = null;
         }
       }
