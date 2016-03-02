@@ -60,11 +60,7 @@ $(document).ready(function() {
       }
 
       function showInfoWindow(marker) {
-        if (dialog) {
-          if (dialog.caree.path) { dialog.caree.path.setMap(null); }
-          if (dialog.marker) { dialog.marker.setMap(MAP); }
-          dialog.close();
-        }
+        hideInfoWindowAndPath();
 
         var caree = marker.caree;
         var lastev = caree.last_event;
@@ -84,8 +80,7 @@ $(document).ready(function() {
         dialog.caree = marker.caree;
         dialog.marker = marker;
         google.maps.event.addListener(dialog, 'closeclick', function(){
-          dialog.caree.path.setMap(null);
-          dialog.marker.setMap(MAP);
+          hideInfoWindowAndPath();
         });
         marker.setMap(null);
         dialog.open(MAP);
@@ -96,16 +91,26 @@ $(document).ready(function() {
           if (caree.path) {
             caree.path.setMap(null);
           }
-          // https://developers.google.com/maps/documentation/javascript/examples/polyline-simple
-          caree.path = new google.maps.Polyline({
-            path: data,
-            geodesic: true,
-            strokeColor: '#FF8080',
-            strokeOpacity: 1.0,
-            strokeWeight: 2
-          });
-          caree.path.setMap(MAP);
+          if (dialog && dialog.caree.id==caree.id) {
+            // https://developers.google.com/maps/documentation/javascript/examples/polyline-simple
+            caree.path = new google.maps.Polyline({
+              path: data,
+              geodesic: true,
+              strokeColor: '#FF8080',
+              strokeOpacity: 1.0,
+              strokeWeight: 2
+            });
+            caree.path.setMap(MAP);
+          }
         }, "json");
+      }
+
+      function hideInfoWindowAndPath() {
+        if (dialog) {
+          if (dialog.caree.path) { dialog.caree.path.setMap(null); }
+          if (dialog.marker) { dialog.marker.setMap(MAP); }
+          dialog = null;
+        }
       }
 
       function onMqttMessage(message) {
