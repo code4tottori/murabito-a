@@ -60,7 +60,10 @@ $(document).ready(function() {
       }
 
       function showInfoWindow(marker) {
-        if (dialog) { dialog.close(); }
+        if (dialog) {
+          dialog.caree.path.setMap(null);
+          dialog.close();
+        }
 
         // $('#careeDialog .event').text(ev.event);
         // $('#careeDialog .heartrate').text(ev.heartrate || "----");
@@ -71,6 +74,10 @@ $(document).ready(function() {
 
         dialog = new google.maps.InfoWindow({
           content: $("<b>もえもえ</b>")[0]
+        });
+        dialog.caree = marker.caree;
+        google.maps.event.addListener(dialog, 'closeclick', function(){
+          dialog.caree.path.setMap(null);
         });
         dialog.open(MAP, marker);
       }
