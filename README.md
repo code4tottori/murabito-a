@@ -51,3 +51,14 @@ git push heroku master
 | AWS_ACCESS_KEY_ID     | `TODO: fixme`        |
 | AWS_SECRET_ACCESS_KEY | `TODO: fixme`        |
 
+## FAQ
+
+* デプロイしたけど、アクセスすると動かない
+  * > DB マイグレートしましたか? ( `heroku run rake db:migrate` )
+* ログ見たい
+  * > `heroku logs` とか `heroku logs -t` とか
+* なんだかCSS効いてない?
+  * > RAILS_SERVE_STATIC_FILES の値を確認してください
+* コンソール操作したい
+  * > `heroku run rails console`
+
