@@ -62,24 +62,33 @@ $(document).ready(function() {
       function showInfoWindow(marker) {
         if (dialog) {
           dialog.caree.path.setMap(null);
+          dialog.marker.setMap(MAP);
           dialog.close();
         }
 
-        // $('#careeDialog .event').text(ev.event);
-        // $('#careeDialog .heartrate').text(ev.heartrate || "----");
-        // $('#careeDialog .location').text(ev.latitude+", "+ev.longitude+", "+(ev.altitude||""));
-        // $('#careeDialog').on("dialogclose", function(e){
-        //   caree.path.setMap(null);
-        // });
-
+        var caree = marker.caree;
+        var lastev = caree.last_event;
+        var content = $('<div />').append(
+          $('<img src="'+caree.icon+'" /><b>'+caree.name+'</b>')
+        ).append(
+          $('<ul/>').append(
+            $('<li/>').text('event: '+lastev.event)
+          ).append(
+            $('<li/>').text('heartrate: '+(lastev.heartrate || '----'))
+          )
+        );
         dialog = new google.maps.InfoWindow({
-          content: $("<b>もえもえ</b>")[0]
+          content: content[0],
+          position: marker.position
         });
         dialog.caree = marker.caree;
+        dialog.marker = marker;
         google.maps.event.addListener(dialog, 'closeclick', function(){
           dialog.caree.path.setMap(null);
+          dialog.marker.setMap(MAP);
         });
-        dialog.open(MAP, marker);
+        marker.setMap(null);
+        dialog.open(MAP);
       }
 
       function showCareeTrail(caree) {
@@ -180,4 +189,3 @@ $(document).ready(function() {
     }
   }
 });
-
