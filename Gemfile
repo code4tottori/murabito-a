@@ -21,6 +21,7 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'bootswatch-rails'
 
 gem 'jquery-rails'
+gem 'jquery-ui-sass-rails'
 
 gem 'bootstrap-sass'
 gem 'bootstrap-sass-extras'
