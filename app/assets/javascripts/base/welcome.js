@@ -50,6 +50,7 @@ $(document).ready(function() {
           clickable: true,
         });
         marker.caree = caree;
+        marker.caree.last_event = {};
         // https://developers.google.com/maps/documentation/javascript/examples/event-simple
         marker.addListener('click', function() {
           MAP.setCenter(marker.getPosition());
@@ -116,6 +117,17 @@ $(document).ready(function() {
       }
 
       function onMqttMessage(message) {
+        var set_last_event = function(last_event, event) {
+          last_event.event = event.event;
+          last_event.heartrate = event.heartrate;
+          last_event.latitude  = event.location ? event.location.lat : null;
+          last_event.longitude = event.location ? event.location.lon : null;
+          last_event.altitude  = event.location ? event.location.alt : null;
+          last_event.acceleration_x = event.acceleration ? event.acceleration.x : null;
+          last_event.acceleration_y = event.acceleration ? event.acceleration.y : null;
+          last_event.acceleration_y = event.acceleration ? event.acceleration.z : null;
+        };
+
         var event = null;
         try {
           event = JSON.parse(message.payloadString);
@@ -129,20 +141,13 @@ $(document).ready(function() {
           if (MARKERS[event.caree_id]==null) {
             $.get(Routes.caree_path(event.caree_id, {format: 'json'}), "", function(caree) {
               var marker = appendNewPin(latlng, caree);
+              set_last_event(marker.caree.last_event, event);
               appendCaree(caree, marker);
             }, "json");
           } else {
-            MARKERS[event.caree_id].setPosition(latlng);
-            MARKERS[event.caree_id].caree.last_event = {
-              event: event.event,
-              heartrate:  event.heartrate,
-              latitude:   event.location ? event.location.lat : null,
-              longitude:  event.location ? event.location.lon : null,
-              altitude:   event.location ? event.location.alt : null,
-              acceleration_x: event.acceleration ? event.acceleration.x : null,
-              acceleration_y: event.acceleration ? event.acceleration.y : null,
-              acceleration_y: event.acceleration ? event.acceleration.z : null,
-            };
+            var marker = MARKERS[event.caree_id];
+            marker.setPosition(latlng);
+            set_last_event(marker.caree.last_event, event);
           }
         } else {
           console.log("dropped: ", message.payloadString);
