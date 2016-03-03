@@ -64,13 +64,14 @@ $(document).ready(function() {
 
         var caree = marker.caree;
         var lastev = caree.last_event;
-        var content = $('<div />').append(
+        var event_class = (lastev.event=='TUMBLED') ? 'tumbled' : 'moved';
+        var content = $('<div class="infoWindow" />').append(
           $('<img src="'+caree.icon+'" /><b>'+caree.name+'</b>')
         ).append(
           $('<ul/>').append(
-            $('<li/>').text('event: '+lastev.event)
+            $('<li class="event '+event_class+'"/>').text(lastev.event)
           ).append(
-            $('<li/>').text('heartrate: '+(lastev.heartrate || '----'))
+            $('<li/>').text((lastev.heartrate || '----'))
           )
         );
         dialog = new google.maps.InfoWindow({

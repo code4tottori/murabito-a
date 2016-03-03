@@ -42,3 +42,30 @@ ul.status {
     }
   }
 }
+
+div.infoWindow {
+  b {
+    margin: 0.5em;
+    font-size: larger;
+  }
+  ul {
+    padding-top: 0.5em;
+    padding-left: 0;
+    padding-right: 0;
+    font-family: monospace;
+  }
+  li {
+    list-style-type: none;
+    padding: 0.2em 0.5em 0.2em 0.5em;
+  }
+  li.event {
+    text-align: center;;
+  }
+  li.tumbled {
+    background-color: pink;
+    font-weight: bold;
+  }
+  li.moved {
+    background-color: skyblue;
+  }
+}
