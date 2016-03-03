@@ -48,7 +48,6 @@ $(document).ready(function() {
           clickable: true,
         });
         marker.caree = caree;
-        marker.caree.last_event = {};
         // https://developers.google.com/maps/documentation/javascript/examples/event-simple
         marker.addListener('click', function() {
           showTrailAndShowInfoWindowCenter(marker);
@@ -143,7 +142,11 @@ $(document).ready(function() {
           if (MARKERS[event.caree_id]==null) {
             $.get(Routes.caree_path(event.caree_id, {format: 'json'}), "", function(caree) {
               var marker = appendNewPin(latlng, caree);
-              set_last_event(marker.caree.last_event, event);
+              if (!marker.caree.last_event) {
+                // DBにまだなかった.
+                marker.caree.last_event = {};
+                set_last_event(marker.caree.last_event, event);
+              }
               appendCaree(caree, marker);
               if (event.event=='TUMBLED') {
                 showTrailAndShowInfoWindowCenter(marker);
