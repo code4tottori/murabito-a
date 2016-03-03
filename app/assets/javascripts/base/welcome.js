@@ -26,9 +26,7 @@ $(document).ready(function() {
           ).appendTo(media);
 
         var onClick = function(ev) {
-          MAP.setCenter(marker.getPosition());
-          showCareeTrail(marker.caree);
-          showInfoWindow(marker);
+          showTrailAndShowInfoWindowCenter(marker);
         };
         $(link).on('click', onClick);
         $(img).on('click', onClick);
@@ -53,11 +51,15 @@ $(document).ready(function() {
         marker.caree.last_event = {};
         // https://developers.google.com/maps/documentation/javascript/examples/event-simple
         marker.addListener('click', function() {
-          MAP.setCenter(marker.getPosition());
-          showCareeTrail(marker.caree);
-          showInfoWindow(marker);
+          showTrailAndShowInfoWindowCenter(marker);
         });
         return marker;
+      }
+
+      function showTrailAndShowInfoWindowCenter(marker) {
+        MAP.setCenter(marker.getPosition());
+        showCareeTrail(marker.caree);
+        showInfoWindow(marker);
       }
 
       function showInfoWindow(marker) {
@@ -143,11 +145,17 @@ $(document).ready(function() {
               var marker = appendNewPin(latlng, caree);
               set_last_event(marker.caree.last_event, event);
               appendCaree(caree, marker);
+              if (event.event=='TUMBLED') {
+                showTrailAndShowInfoWindowCenter(marker);
+              }
             }, "json");
           } else {
             var marker = MARKERS[event.caree_id];
             marker.setPosition(latlng);
             set_last_event(marker.caree.last_event, event);
+            if (event.event=='TUMBLED') {
+              showTrailAndShowInfoWindowCenter(marker);
+            }
           }
         } else {
           console.log("dropped: ", message.payloadString);
