@@ -51,7 +51,7 @@ module Dystopia
     config.middleware.insert_before ActionDispatch::Static, Rack::Cors do
       allow do
         origins '*'
-        resource '*', :headers => :any, :methods => [:get, :post]
+        resource '/mqtturi', :headers => :any, :methods => [:get]
       end
     end
   end
