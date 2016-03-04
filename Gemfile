@@ -39,6 +39,7 @@ gem 'aws-sdk'
 gem 'mqtt'
 gem 'rest-client'
 gem 'foreman'
+gem 'rack-cors'
 
 group :development, :test do
   gem 'byebug'
