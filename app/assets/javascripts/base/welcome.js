@@ -13,7 +13,7 @@ $(document).ready(function() {
 
         var body = $('<div class="panel-body">').appendTo(panel);
         var media = $('<div class="media">').appendTo(body);
-        var img = $('<a href="#" />').append($('<img class="img-circle media-object" />').attr('src', caree.icon).attr('alt', caree.name))
+        var img = $('<a href="#" />').append($('<img class="img-circle media-object caree-icon" />').attr('src', caree.icon).attr('alt', caree.name))
         $('<div class="media-left">').append(
             img
           ).appendTo(media);
@@ -43,7 +43,7 @@ $(document).ready(function() {
         var marker = MARKERS[caree.id] = new google.maps.Marker({
           map: MAP,
           position: latlng,
-          icon: caree.icon,
+          icon: { url: caree.icon, scaledSize: new google.maps.Size(48, 48) },
           title: caree.name,
           clickable: true,
         });
@@ -68,7 +68,7 @@ $(document).ready(function() {
         var lastev = caree.last_event;
         var event_class = (lastev.event=='TUMBLED') ? 'tumbled' : 'moved';
         var content = $('<div class="infoWindow" />').append(
-          $('<img src="'+caree.icon+'" /><b>'+caree.name+'</b>')
+          $('<img class="img-circle media-object caree-icon" src="'+caree.icon+'" /><b>'+caree.name+'</b>')
         ).append(
           $('<ul/>').append(
             $('<li class="event '+event_class+'"/>').text(lastev.event)
