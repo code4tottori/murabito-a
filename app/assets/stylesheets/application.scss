@@ -41,6 +41,16 @@ ul.status {
       }
     }
   }
+  .panel-heading {
+    .panel-title {
+      a:visited {
+        color: inherit;
+      }
+      a:hover {
+        background-color: inherit;
+      }
+    }
+  }
 }
 
 div.infoWindow {
@@ -74,4 +84,6 @@ div.infoWindow {
   max-height: 84px;
   max-width: 84px;
 }
+
+@import "./**/*";
 
