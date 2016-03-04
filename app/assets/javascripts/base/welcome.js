@@ -4,6 +4,22 @@ $(document).ready(function() {
 
     if ($("body").hasClass("index")) {
 
+      var getPrettyAddress = function(lat, lng, callback) {
+        var geocoder = new google.maps.Geocoder();
+        var latLng = new google.maps.LatLng(lat, lng);
+        geocoder.geocode({latLng: latLng}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            if (results[0].geometry) {
+              var address = results[0]['address_components'].filter(function(component) {
+                var type = component.types[0];
+                return type != 'route' && type != 'country' && type != 'postal_code';
+              }).map(function(_) { return _.short_name; }).reverse().join('');
+              callback(address);
+            }
+          }
+        });
+      };
+
       // append caree status to sidebar.
       var appendCaree = function(caree, marker) {
         var panel = $('<li class="panel panel-primary" />');
@@ -13,7 +29,8 @@ $(document).ready(function() {
 
         var body = $('<div class="panel-body">').appendTo(panel);
         var media = $('<div class="media">').appendTo(body);
-        var img = $('<a href="#" />').append($('<img class="img-circle media-object caree-icon" />').attr('src', caree.icon).attr('alt', caree.name))
+        var img = $('<a href="#" />').append($('<img class="img-circle media-object caree-icon" />').attr('src', caree.icon).attr('alt', caree.name));
+        var address = $('<li />');
         $('<div class="media-left">').append(
             img
           ).appendTo(media);
@@ -22,7 +39,7 @@ $(document).ready(function() {
               $('<li />').text('lat: ' + caree.last_event.latitude)
             ).append(
               $('<li />').text('lng: ' + caree.last_event.longitude)
-            )
+            ).append(address)
           ).appendTo(media);
 
         var onClick = function(ev) {
@@ -32,6 +49,10 @@ $(document).ready(function() {
         $(img).on('click', onClick);
 
         $('ul.status').append(panel);
+
+        getPrettyAddress(caree.last_event.latitude, caree.last_event.longitude, function(name) {
+          address.text(name);
+        });
       };
 
       var MAP = null;
