@@ -12,7 +12,7 @@ $(document).ready(function() {
             if (results[0].geometry) {
               var address = results[0]['address_components'].filter(function(component) {
                 var type = component.types[0];
-                return type != 'route' && type != 'country' && type != 'postal_code';
+                return type != 'route' && type != 'country' && type != 'postal_code' && type != 'administrative_area_level_1';
               }).map(function(_) { return _.short_name; }).reverse().join('');
               callback(address);
             }
