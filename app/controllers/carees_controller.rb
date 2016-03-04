@@ -78,6 +78,6 @@ class CareesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def caree_params
-      params.fetch(:caree, {}).permit(:name, :icon)
+      params.fetch(:caree, {}).permit(:name, :age, :icon)
     end
 end

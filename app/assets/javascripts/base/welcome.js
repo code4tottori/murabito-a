@@ -24,22 +24,24 @@ $(document).ready(function() {
       var appendCaree = function(caree, marker) {
         var panel = $('<li class="panel panel-primary" />');
         var heading = $('<div class="panel-heading">').appendTo(panel);
-        var link = $('<a href="#" />').text(caree.name);
+        var link = $('<a href="#" />').text(caree.name + 'さん' + ' (' + caree.age + ') ');
         $('<h4 class="panel-title">').append(link).appendTo(heading);
 
         var body = $('<div class="panel-body">').appendTo(panel);
         var media = $('<div class="media">').appendTo(body);
         var img = $('<a href="#" />').append($('<img class="img-circle media-object caree-icon" />').attr('src', caree.icon).attr('alt', caree.name));
-        var address = $('<li />');
+        var address = $('<li />').attr('title', 'lat: ' + caree.last_event.latitude + "\n" + 'lng: ' + caree.last_event.longitude);
+        var heartRate = $('<li />').text("脈拍 : " + "（＾q＾）");
+
         $('<div class="media-left">').append(
             img
           ).appendTo(media);
         $('<div class="media-body">').append(
           $('<ul />').append(
-              $('<li />').text('lat: ' + caree.last_event.latitude)
+              address
             ).append(
-              $('<li />').text('lng: ' + caree.last_event.longitude)
-            ).append(address)
+              heartRate
+            )
           ).appendTo(media);
 
         var onClick = function(ev) {
@@ -51,7 +53,7 @@ $(document).ready(function() {
         $('ul.status').append(panel);
 
         getPrettyAddress(caree.last_event.latitude, caree.last_event.longitude, function(name) {
-          address.text(name);
+          address.text(name + '周辺');
         });
       };
 

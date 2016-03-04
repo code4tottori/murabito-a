@@ -6,6 +6,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Age</th>
       <th>Event count</th>
       <th>Icon</th>
       <th colspan="3"></th>
@@ -16,6 +17,7 @@
     <% @carees.each do |caree| %>
       <tr>
         <td><%= caree.name %></td>
+        <td><%= caree.age %></td>
         <td><%= caree.event_ids.size %></td>
         <td><a href="<%= caree.icon %>">CLICK</a></td>
         <td><%= link_to 'Show', caree %></td>
