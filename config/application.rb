@@ -52,8 +52,8 @@ module Dystopia
       allow do
         origins '*'
         resource '/mqtturi', :headers => :any, :methods => [:get]
+        resource '/carees', :headers => :any, :methods => [:get]
       end
     end
   end
 end
-
