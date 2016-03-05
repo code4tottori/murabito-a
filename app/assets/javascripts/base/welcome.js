@@ -31,7 +31,7 @@ $(document).ready(function() {
         var media = $('<div class="media">').appendTo(body);
         var img = $('<a href="#" />').append($('<img class="img-circle media-object caree-icon" />').attr('src', caree.icon).attr('alt', caree.name));
         var address = $('<li />').attr('title', 'lat: ' + caree.last_event.latitude + "\n" + 'lng: ' + caree.last_event.longitude);
-        var heartRate = $('<li />').text("脈拍 : " + "（＾q＾）");
+        var heartRate = $('<li />').text("脈拍 : " + (Math.floor( Math.random() * 30 ) + 55));
 
         $('<div class="media-left">').append(
             img
