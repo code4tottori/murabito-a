@@ -84,17 +84,18 @@ $(document).ready(function() {
         showInfoWindow(marker);
       }
 
+      var EVENT_SHOW={TUMBLED:'転んだ！', MOVED:'移動中'};
       function showInfoWindow(marker) {
         hideInfoWindowAndPath();
 
         var caree = marker.caree;
         var lastev = caree.last_event;
-        var event_class = (lastev.event=='TUMBLED') ? 'tumbled' : 'moved';
+        var event_show  = EVENT_SHOW[lastev.event] || lastev.event;
         var content = $('<div class="infoWindow" />').append(
           $('<img class="img-circle media-object caree-icon" src="'+caree.icon+'" /><b>'+caree.name+'</b>')
         ).append(
           $('<ul/>').append(
-            $('<li class="event '+event_class+'"/>').text(lastev.event)
+            $('<li class="event '+lastev.event.toLowerCase()+'"/>').text(event_show)
           ).append(
             $('<li/>').text((lastev.heartrate || '----'))
           )
