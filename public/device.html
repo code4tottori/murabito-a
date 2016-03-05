@@ -85,6 +85,8 @@
   function set_caree_id() {
     var id = $("#caree_id").val();
     thisDevice.caree_id = Number(id);
+    $("#name").html('(unknown)');
+    $("#icon").attr("src", null);
     $.get("/carees/"+id+".json","", function(caree) {
       $("#name").html(caree.name);
       $("#icon").attr("src", caree.icon);
