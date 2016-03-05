@@ -84,10 +84,10 @@
 
   function set_caree_id() {
     var id = $("#caree_id").val();
+    thisDevice.caree_id = Number(id);
     $.get("/carees/"+id+".json","", function(caree) {
       $("#name").html(caree.name);
       $("#icon").attr("src", caree.icon);
-      thisDevice.caree_id = Number(id);
     }, "json");
   }
 
